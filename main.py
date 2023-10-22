@@ -2,10 +2,8 @@ from openpyxl import load_workbook
 import tkinter
 from tkinter import PhotoImage
 from tkinter import ttk
-from tkinter.filedialog import askopenfile
 from tkinter.messagebox import showerror
 from tkinter.filedialog import asksaveasfile, askopenfile
-from tkinter import messagebox
 
 filename = ''
 
@@ -78,9 +76,10 @@ def generate(file):
             else:
                 phone_formatted = phone[0] + ' ' + phone[1:4] + ' ' + phone[4:7] + '-' + phone[7:9] + '-' + phone[9:12]
             try:
-                vcard.write(
-                    f'BEGIN:VCARD\nVERSION:3.0\nFN:{l_name} {name} {m_name}\nitem1.TEL:{phone_formatted}\n'
-                    f'item1.X-ABLabel:'f'\nCATEGORIES:Категория\nEND:VCARD\n')
+                with open(vcard, 'w', encoding='utf-8') as file:
+                    file.write(
+                        f'BEGIN:VCARD\nVERSION:3.0\nFN:{l_name} {name} {m_name}\nitem1.TEL:{phone_formatted}\n'
+                        f'item1.X-ABLabel:'f'\nCATEGORIES:Категория\nEND:VCARD\n')
             except Exception:
                 vcard.close()
     except Exception:
@@ -148,9 +147,10 @@ def generate_parents(file):
             else:
                 phone_formatted = phone[0] + ' ' + phone[1:4] + ' ' + phone[4:7] + '-' + phone[7:9] + '-' + phone[9:12]
             try:
-                vcard.write(
-                    f'BEGIN:VCARD\nVERSION:3.0\nFN:{l_name} {name} {m_name}\nitem1.TEL:{phone_formatted}\n'
-                    f'item1.X-ABLabel:'f'\nCATEGORIES:Категория\nEND:VCARD\n')
+                with open(vcard, 'w', encoding='utf-8'):
+                    vcard.write(
+                        f'BEGIN:VCARD\nVERSION:3.0\nFN:{l_name} {name} {m_name}\nitem1.TEL:{phone_formatted}\n'
+                        f'item1.X-ABLabel:'f'\nCATEGORIES:Категория\nEND:VCARD\n')
             except Exception:
                 vcard.close()
     except Exception:
