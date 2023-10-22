@@ -2,8 +2,10 @@ from openpyxl import load_workbook
 import tkinter
 from tkinter import PhotoImage
 from tkinter import ttk
+from tkinter.filedialog import askopenfile, asksaveasfilename
 from tkinter.messagebox import showerror
 from tkinter.filedialog import asksaveasfile, askopenfile
+from tkinter import messagebox
 
 filename = ''
 
@@ -46,7 +48,8 @@ def generate(file):
         #vcard = open('card.vcf', 'w', encoding='utf-8')
         files = [('VCARD', '*.vcf')]
 
-        vcard = asksaveasfile(mode='w', filetypes=files, defaultextension=".vcf", title="Сохранить файл")
+        vcardtemp = asksaveasfilename(filetypes=files, defaultextension=".vcf", title="Сохранить файл")
+        vcard = open(vcardtemp, 'w+', encoding='utf-8')
         for i, row in enumerate(sheet.rows):
             if i == 0:
                 continue
@@ -76,10 +79,10 @@ def generate(file):
             else:
                 phone_formatted = phone[0] + ' ' + phone[1:4] + ' ' + phone[4:7] + '-' + phone[7:9] + '-' + phone[9:12]
             try:
-                with open(vcard, 'w', encoding='utf-8') as file:
-                    file.write(
-                        f'BEGIN:VCARD\nVERSION:3.0\nFN:{l_name} {name} {m_name}\nitem1.TEL:{phone_formatted}\n'
-                        f'item1.X-ABLabel:'f'\nCATEGORIES:Категория\nEND:VCARD\n')
+                vcard.write(
+                    f'BEGIN:VCARD\nVERSION:3.0\nFN:{l_name} {name} {m_name}\nitem1.TEL:{phone_formatted}\n'
+                    f'item1.X-ABLabel:'f'\nCATEGORIES:Категория\nEND:VCARD\n')
+
             except Exception:
                 vcard.close()
     except Exception:
@@ -111,7 +114,8 @@ def generate_parents(file):
         sheet = workbook.active
         files = [('VCARD', '*.vcf')]
 
-        vcard = asksaveasfile(mode='w', filetypes=files, defaultextension=".vcf", title="Сохранить файл")
+        vcardtemp = asksaveasfilename(filetypes=files, defaultextension=".vcf", title="Сохранить файл")
+        vcard = open(vcardtemp, 'w+', encoding='utf-8')
 
         for i, row in enumerate(sheet.rows):
             if i == 0:
@@ -147,10 +151,9 @@ def generate_parents(file):
             else:
                 phone_formatted = phone[0] + ' ' + phone[1:4] + ' ' + phone[4:7] + '-' + phone[7:9] + '-' + phone[9:12]
             try:
-                with open(vcard, 'w', encoding='utf-8'):
-                    vcard.write(
-                        f'BEGIN:VCARD\nVERSION:3.0\nFN:{l_name} {name} {m_name}\nitem1.TEL:{phone_formatted}\n'
-                        f'item1.X-ABLabel:'f'\nCATEGORIES:Категория\nEND:VCARD\n')
+                vcard.write(
+                    f'BEGIN:VCARD\nVERSION:3.0\nFN:{l_name} {name} {m_name}\nitem1.TEL:{phone_formatted}\n'
+                    f'item1.X-ABLabel:'f'\nCATEGORIES:Категория\nEND:VCARD\n')
             except Exception:
                 vcard.close()
     except Exception:
