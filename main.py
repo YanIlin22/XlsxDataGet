@@ -79,11 +79,11 @@ def generate(file):
                 noPhoneNumbers = noPhoneNumbers + l_name + " " + name + " " + m_name + "\n"
                 continue
             else:
-                print(phone)
+                #print(phone)
                 phone_formatted = phone[0] + ' ' + phone[1:4] + ' ' + phone[4:7] + '-' + phone[7:9] + '-' + phone[9:12]
             try:
                 vcard.write(
-                    f'BEGIN:VCARD\nVERSION:3.0\nFN:{l_name} {name} {m_name}\nitem1.TEL:{phone_formatted}\n'
+                    f'BEGIN:VCARD\nVERSION:3.0\nFN:{l_name} {""} {name} {""} {m_name}\nitem1.TEL:{phone_formatted}\n'
                     f'item1.X-ABLabel:'f'\nCATEGORIES:Категория\nEND:VCARD\n')
 
             except Exception:
@@ -154,7 +154,7 @@ def generate_parents(file):
                 phone_formatted = phone[0] + ' ' + phone[1:4] + ' ' + phone[4:7] + '-' + phone[7:9] + '-' + phone[9:12]
             try:
                 vcard.write(
-                    f'BEGIN:VCARD\nVERSION:3.0\nFN:{l_name} {name} {m_name}\nitem1.TEL:{phone_formatted}\n'
+                    f'BEGIN:VCARD\nVERSION:3.0\nFN:{l_name} {""} {name} {""} {m_name}\nitem1.TEL:{phone_formatted}\n'
                     f'item1.X-ABLabel:'f'\nCATEGORIES:Категория\nEND:VCARD\n')
             except Exception:
                 vcard.close()
@@ -200,6 +200,7 @@ def get_groups(file):
     except Exception:
         showerror(title="Ошибка", message="Произошла ошибка. Проверьте формат файла!")
         error = True
+        root.destroy()
 
 
 def group_value(i):
