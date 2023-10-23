@@ -2,10 +2,9 @@ from openpyxl import load_workbook
 import tkinter
 from tkinter import PhotoImage
 from tkinter import ttk
-from tkinter.filedialog import askopenfile, asksaveasfilename
+from tkinter.filedialog import asksaveasfilename
 from tkinter.messagebox import showerror
-from tkinter.filedialog import asksaveasfile, askopenfile
-from tkinter import messagebox
+from tkinter.filedialog import askopenfile
 
 filename = ''
 
@@ -15,13 +14,14 @@ noPhoneNumbers = ""
 
 group = ""
 
+
 def open_file():
     global filename
     i = askopenfile(mode="r")
     if i is None:
         return
     filename = i.name
-    #print(filename)
+    # print(filename)
     opened_label.config(text="Файл открыт", foreground="green")
     btngen["state"] = tkinter.NORMAL
     btngen_parents["state"] = tkinter.NORMAL
@@ -34,8 +34,10 @@ def open_file():
 def gen():
     generate(filename)
 
+
 def gen_parents():
     generate_parents(filename)
+
 
 def generate(file):
     global error
@@ -45,7 +47,7 @@ def generate(file):
         workbook = load_workbook(filename=file)
 
         sheet = workbook.active
-        #vcard = open('card.vcf', 'w', encoding='utf-8')
+        # vcard = open('card.vcf', 'w', encoding='utf-8')
         files = [('VCARD', '*.vcf')]
 
         vcardtemp = asksaveasfilename(filetypes=files, defaultextension=".vcf", title="Сохранить файл")
@@ -72,11 +74,12 @@ def generate(file):
             if current_group != combobox.get():
                 continue
 
-            if phone is None or phone == "-":
+            if phone is None or "-" in phone:
                 # phone_formatted = "---"
-                noPhoneNumbers = noPhoneNumbers + l_name +" "+ name +" "+ m_name+ "\n"
+                noPhoneNumbers = noPhoneNumbers + l_name + " " + name + " " + m_name + "\n"
                 continue
             else:
+                print(phone)
                 phone_formatted = phone[0] + ' ' + phone[1:4] + ' ' + phone[4:7] + '-' + phone[7:9] + '-' + phone[9:12]
             try:
                 vcard.write(
@@ -101,8 +104,9 @@ def generate(file):
                                                                            "найдены: " + noPhoneNumbers)
             root.destroy()
     except Exception:
-        #showerror(title="Ошибка", message="Не сформировано")
+        # showerror(title="Ошибка", message="Не сформировано")
         root.destroy()
+
 
 def generate_parents(file):
     global error
@@ -139,14 +143,12 @@ def generate_parents(file):
             phone = row[39].value
             current_group = row[20].value
 
-
-
             if current_group != combobox.get():
                 continue
 
-            if phone is None or phone == "-":
+            if phone is None or "-" in phone:
                 # phone_formatted = "---"
-                noPhoneNumbers = noPhoneNumbers + l_name +" "+ name +" "+ m_name+ "\n"
+                noPhoneNumbers = noPhoneNumbers + l_name + " " + name + " " + m_name + "\n"
                 continue
             else:
                 phone_formatted = phone[0] + ' ' + phone[1:4] + ' ' + phone[4:7] + '-' + phone[7:9] + '-' + phone[9:12]
@@ -172,8 +174,10 @@ def generate_parents(file):
                                                                            "найдены: " + noPhoneNumbers)
             root.destroy()
     except Exception:
-        #showerror(title="Ошибка", message="Не сформировано")
+        # showerror(title="Ошибка", message="Не сформировано")
         root.destroy()
+
+
 def get_groups(file):
     global error
     try:
@@ -189,7 +193,7 @@ def get_groups(file):
             group = row[20].value
             if group is None:
                 continue
-            #print(group)
+            # print(group)
             groups.add(group)
 
         return sorted(list(groups))
@@ -201,26 +205,28 @@ def get_groups(file):
 def group_value(i):
     global group
     group = combobox.get()
+
+
 root = tkinter.Tk()
 root.title('XlsxDataGet')
 root.geometry("250x235")
 root.resizable(False, False)
 open_label = tkinter.Label(text="Откройте файл Xlsx")
-open_label.grid(sticky="n", padx=2 ,pady=2, column=0)
+open_label.grid(sticky="n", padx=2, pady=2, column=0)
 btnopen = ttk.Button(text="Открыть", command=open_file)
-btnopen.grid(sticky="n",ipadx=75, ipady=10,padx=12 , row=2)
+btnopen.grid(sticky="n", ipadx=75, ipady=10, padx=12, row=2)
 opened_label = tkinter.Label(text="Файл не открыт")
-opened_label.grid(padx=2 ,pady=3)
+opened_label.grid(padx=2, pady=3)
 combobox = ttk.Combobox(state=tkinter.DISABLED)
 combobox.config(state="readonly")
 combobox.set("Выберите группу")
 combobox.grid(padx=2, ipadx=35)
 combobox.bind("<<ComboboxSelected>>", group_value)
-#ttk.Entry().pack()
+# ttk.Entry().pack()
 btngen = ttk.Button(text="Ученики", state=tkinter.DISABLED, command=gen)
-btngen.grid(pady=7, padx=12 ,ipadx=75, ipady=10)
+btngen.grid(pady=7, padx=12, ipadx=75, ipady=10)
 btngen_parents = ttk.Button(text="Родители", state=tkinter.DISABLED, command=gen_parents)
-btngen_parents.grid(sticky="s", padx=12, row=6 ,ipadx=75, ipady=10)
+btngen_parents.grid(sticky="s", padx=12, row=6, ipadx=75, ipady=10)
 icon = PhotoImage(file='icon.png')
 root.iconphoto(False, icon)
 root.mainloop()
